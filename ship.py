@@ -5,10 +5,11 @@ class Ship:
     def __init__(self, ai_game):
         # initialize ship and start position
         self.screen = ai_game.screen
-        self.screen_rect = ai_game.get_rect()
+        self.screen_rect = ai_game.screen.get_rect()
 
         # load ship image
         self.image = pygame.image.load("images/ship.bmp")
+        self.rect = self.image.get_rect()
         # start each ship at bottom center
         self.rect.midbottom = self.screen_rect.midbottom
 
