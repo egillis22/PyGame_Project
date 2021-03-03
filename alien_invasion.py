@@ -6,6 +6,7 @@ from bullet import Bullet
 from alien import Alien
 from time import sleep
 from game_stats import GameStats
+from scoreboard import Scoreboard
 from button import Button
 
 
@@ -22,8 +23,10 @@ class AlienInvasion:
         self.settings.screen_height = self.screen.get_rect().height
 
         pygame.display.set_caption("Alien Invasion")
+        # create an instance to store game statistics
         # create game stat instance
         self.stats = GameStats(self)
+        self.sb = Scoreboard(self)
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
@@ -88,6 +91,7 @@ class AlienInvasion:
             # destroy existing bullets and create new fleet
             self.bullets.empty()
             self._create_fleet()
+            self.settings.increase_speed()
 
     def _create_fleet(self):
         alien = Alien(self)
@@ -125,6 +129,7 @@ class AlienInvasion:
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.aliens.draw(self.screen)
+        self.sb.show_score()
         if not self.stats.game_active:
             self.play_button.draw_button()
         # make most recently drawn screen visible
@@ -151,6 +156,7 @@ class AlienInvasion:
             sleep(0.5)
         else:
             self.stats.game_active = False
+            pygame.mouse.set_visible(True)
 
     def _check_aliens_bottom(self):
         screen_rect = self.screen.get_rect()
@@ -167,6 +173,8 @@ class AlienInvasion:
             self.aliens.empty()
             self.bullets.empty()
             self._create_fleet()
+            self.settings.initialize_dynamic_settings()
+            pygame.mouse.set_visible(False)
 
 
 if __name__ == "__main__":
